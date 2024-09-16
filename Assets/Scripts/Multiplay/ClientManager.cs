@@ -8,10 +8,14 @@ public class ClientManager : MonoBehaviour
     // NetworkManager를 참조하기 위한 변수
     private NetworkManager networkManager;
 
+    void Awake()
+    {
+        networkManager = GetComponent<NetworkManager>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        networkManager = NetworkManager.Singleton;
         // 클라이언트가 연결될 때 호출될 콜백 등록
         networkManager.OnClientConnectedCallback += OnClientConnected;
 
