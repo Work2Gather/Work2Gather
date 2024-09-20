@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
-    [SerializeField] UIManager UIManager;
+    [SerializeField] public UIManager UIManager;
+    [SerializeField] public HTTPManager HTTPManager;
     private static TitleManager _instance;
     // 인스턴스에 접근하기 위한 프로퍼티
     public static TitleManager Instance
