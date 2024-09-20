@@ -5,11 +5,11 @@ using UnityEngine.Networking;
 
 public class UserClass
 {
-    string user_name;
-    int user_character_id;
-    int user_age;
-    string user_gender;
-    List<long> user_job_id;
+    public string user_name;
+    public int user_character_id;
+    public int user_age;
+    public string user_gender;
+    public List<long> user_job_id;
 
     public UserClass(string user_name, int user_character_id, int user_age, string user_gender, List<long> user_job_id)
     {
@@ -23,6 +23,7 @@ public class UserClass
 
 public class HTTPManager : MonoBehaviour
 {
+    public UserClass CurrentUserClass = null;
     [SerializeField] private string baseURL;
     void Start()
     {
@@ -31,7 +32,8 @@ public class HTTPManager : MonoBehaviour
 
     public void PostUserClass(UserClass user)
     {
-        StartCoroutine(DoPostUserClass(user));
+        CurrentUserClass = user;
+        //StartCoroutine(DoPostUserClass(CurrentUserClass));
     }
 
     private IEnumerator DoPostUserClass(UserClass user)

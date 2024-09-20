@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public FadeEffect FadePanel;
     public FadeEffect WelcomeText;
     public Button[] TitleButtonArray;
+    public GameObject RegistrationCard;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

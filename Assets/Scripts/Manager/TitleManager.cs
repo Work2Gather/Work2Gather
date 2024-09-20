@@ -1,4 +1,6 @@
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
@@ -58,6 +60,11 @@ public class TitleManager : MonoBehaviour
 
 
         UIManager.FadePanel.FadePanel(0, 0.8f, 2);
+    }
+
+    public void ConnectToWorld()
+    {
+        SceneManager.LoadScene("");
     }
 
     #endregion
