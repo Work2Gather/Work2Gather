@@ -25,6 +25,9 @@ public class Age : MonoBehaviour
             case 3:
                 CurrentAge = 30;
                 break;
+            case 4:
+                CurrentAge = 40;
+                break;
             default:
                 CurrentAge = -1;
                 break;

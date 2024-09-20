@@ -5,13 +5,13 @@ using UnityEngine;
 public class Job : MonoBehaviour
 {
     [SerializeField] TMP_Dropdown dropdown;
-    public List<long> CurrentJobList;
+    public List<string> CurrentJobList;
     private Dictionary<string, long> jobDic;
     private int maxBitSize = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        CurrentJobList = new List<long>();
+        CurrentJobList = new List<string>();
         jobDic = new Dictionary<string, long>();
 
         int dicIndex = 1;
@@ -33,7 +33,7 @@ public class Job : MonoBehaviour
             int temp = dropdown.value & (1 << i);
             if (temp == (1 << i))
             {
-                CurrentJobList.Add(i + 1);
+                CurrentJobList.Add(dropdown.options[i+1].text);
             }
         }
         Debug.Log(CurrentJobList);

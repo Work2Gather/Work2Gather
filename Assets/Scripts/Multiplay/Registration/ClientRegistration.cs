@@ -109,12 +109,14 @@ public class ClientRegistration : MonoBehaviour
                 InitUserClass();
                 TitleManager.Instance.HTTPManager.PostUserClass(userClass);
                 TitleManager.Instance.UIManager.RegistrationCard.SetActive(true);
+                gameObject.SetActive(false);
                 break;
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        TitleManager.Instance.UIManager.WelcomeText.gameObject.SetActive(false);
         userClass = new UserClass("", 0, 0, "", null);
 
         PageObjectArray[0].SetActive(true);
