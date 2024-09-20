@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using UnityEditor.PackageManager;
 
 public class Nickname : MonoBehaviour
 {
