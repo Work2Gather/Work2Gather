@@ -102,3 +102,5 @@ Assets/UserData.json
 # Edit from neoskyclad
 .fmod_editor.log
 Assets/UserData.json
+ProjectSettings/InputManager.asset
+ProjectSettings/ShaderGraphSettings.asset
