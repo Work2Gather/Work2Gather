@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Timer : MonoBehaviour
 {
@@ -15,13 +16,25 @@ public class Timer : MonoBehaviour
     #region Private Member
     private int min;
     private int sec;
+    private UnityAction onTimeOutEvent;
 
     #endregion
-    
+
     public void StartTimer(int _timerSec)
     {
         timerSec = _timerSec;
         StartCoroutine(DoStartTimer());
+    }
+
+    public Timer OnTimeOut(UnityAction unityAction)
+    {
+        if (unityAction == null)
+            return this;
+
+        onTimeOutEvent = null;
+        onTimeOutEvent = unityAction;
+
+        return this;
     }
 
     private string PadZeroNumber(int _num)
@@ -33,7 +46,7 @@ public class Timer : MonoBehaviour
     {
         string tempText = "0:00";
 
-        while(timerSec >= 0)
+        while (timerSec >= 0)
         {
             double temp = timerSec / 60;
             min = (int)Math.Floor(temp);
@@ -47,5 +60,7 @@ public class Timer : MonoBehaviour
         }
         timerSec = 0;
         Debug.Log("Timer Stopped");
+        if (onTimeOutEvent != null)
+            onTimeOutEvent.Invoke();
     }
 }

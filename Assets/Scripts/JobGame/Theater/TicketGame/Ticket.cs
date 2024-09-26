@@ -52,7 +52,7 @@ namespace TicketGame
         // Start is called before the first frame update
         void Start()
         {
-            ticketGameManager = TicketGameManager.Instance;
+            ticketGameManager = TheaterManager.Instance.TicketGameManager;
         }
 
         // Update is called once per frame

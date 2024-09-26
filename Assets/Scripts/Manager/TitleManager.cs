@@ -63,7 +63,7 @@ public class TitleManager : MonoBehaviour
 
     public void ConnectToWorld()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("1. MainTown");
     }
 
     #endregion
