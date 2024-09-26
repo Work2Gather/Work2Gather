@@ -8,17 +8,7 @@ using MongoDB.Driver;
 public class ServerManager : MonoBehaviour
 {
     private NetworkManager networkManager;
-    //[SerializeField] GameObject PlayerPrefab;
-
-    // MongoDB 클라이언트 및 데이터베이스 변수
-    private IMongoClient mongoClient;
-    private IMongoDatabase database;
-
-    private string mongoDBUserName = "work2gatherAdmin";
-
-    private string mongoDBPassword = "BqaqH3zsAL3xSM1o";
-
-    private string mongoDBName = "work2gather";
+    private DatabaseManager databaseManager;
 
     void Start()
     {
@@ -37,7 +27,7 @@ public class ServerManager : MonoBehaviour
     private void HandleServerStarted()
     {
         Debug.Log("서버가 시작되었습니다.");
-        ConnectToMongoDB(); // MongoDB 연결
+        databaseManager.mongoDBContext.ConnectToMongoDB(); // DB 연결 하고싶음
     }
 
     // 클라이언트가 연결되었을 때 호출될 함수
@@ -75,25 +65,4 @@ public class ServerManager : MonoBehaviour
         networkManager.StartClient();
     }
 
-    // MongoDB 연결 함수
-    void ConnectToMongoDB()
-    {
-        // MongoDB 연결 문자열
-        string connectionString = $"mongodb+srv://{mongoDBUserName}:{mongoDBPassword}@qualificationalitated.rc7ev.mongodb.net/?retryWrites=true&w=majority&appName=qualificationalitated";
-
-        // MongoDB 클라이언트 생성
-        mongoClient = new MongoClient(connectionString);
-
-        // 데이터베이스 선택
-        database = mongoClient.GetDatabase(mongoDBName);
-
-        // 데이터베이스 컬렉션 설정
-        // 컴퍼니 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 유저 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 게임카테고리 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 잡카테고리 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-
-
-        Debug.Log("MongoDB에 연결되었습니다.");
-    }
 }

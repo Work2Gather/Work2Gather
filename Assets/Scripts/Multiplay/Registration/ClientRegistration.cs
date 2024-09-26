@@ -107,7 +107,7 @@ public class ClientRegistration : MonoBehaviour
                 break;
             case 2:
                 InitUserClass();
-                TitleManager.Instance.HTTPManager.PostUserClass(userClass);
+                // TitleManager.Instance.HTTPManager.PostUserClass(userClass);
                 TitleManager.Instance.UIManager.RegistrationCard.SetActive(true);
                 gameObject.SetActive(false);
                 break;

@@ -16,9 +16,11 @@ public class RegistrationCard : MonoBehaviour
     public Sprite[] CharacterImageArray;
     private UserClass userClass;
 
+    // 유저 create 후 get 하는부분
     private void OnEnable()
     {
-        userClass = TitleManager.Instance.HTTPManager.CurrentUserClass;
+        // userClass = TitleManager.Instance.DatabaseManager.CurrentUserClass;
+        // user class = 유저 get 받아오기
         InitRegistrationCard();
         ConnectButton.gameObject.SetActive(true);
     }
