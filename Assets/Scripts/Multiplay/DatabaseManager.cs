@@ -147,7 +147,7 @@ public class CompanyClass
 public class MongoDBContext
 {
     private IMongoClient mongoClient;
-    private IMongoDatabase database;
+    public IMongoDatabase database{get; private set;}
 
     private string mongoDBUserName = "work2gatherAdmin";
 
@@ -166,32 +166,19 @@ public class MongoDBContext
         // 데이터베이스 선택
         database = mongoClient.GetDatabase(mongoDBName);
 
-        // 데이터베이스 컬렉션 설정
-        // 컴퍼니 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 유저 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 게임카테고리 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-        // 잡카테고리 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
-
-
         Debug.Log("MongoDB에 연결되었습니다.");
     }
-
 }
 
 #endregion
 
 public class DatabaseManager : MonoBehaviour
 {
-    #region Collection Name
-    public readonly string CompaniesCollection = "Companies";
-    public readonly string UsersCollection = "Users";
-    public readonly string GameCategoryCollection = "GameCategory";
-    public readonly string JobCategoryCollection = "JobCategory";
-    #endregion
-    public MongoDBContext mongoDBContext;
+    public MongoDBContext mongoDBContext = new MongoDBContext();
+    [SerializeField] public CollectionManager collectionManager;
 
     void Start()
     {
-
+        collectionManager.Initialize(mongoDBContext.database);
     }
 }
