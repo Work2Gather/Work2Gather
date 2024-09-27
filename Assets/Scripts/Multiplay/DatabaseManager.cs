@@ -29,14 +29,14 @@ public class UserClass
     [BsonElement("user_gender")]
     public string user_gender { get; set; }
 
+    [BsonElement("user_jobs")]
+    public List<string> user_jobs { get; set; }
+
+    [BsonElement("user_game_histories")]
+    public List<GameHistoryClass> user_game_histories { get; set; }
+
     [BsonElement("created_at")]
     public DateTime created_at { get; set; }
-
-    [BsonElement("jobs")]
-    public List<string> user_job_id { get; set; }
-
-    [BsonElement("games")]
-    public List<GameClass> games { get; set; }
 
     public UserClass(string user_name, int user_character_id, int user_age, string user_gender, List<string> user_current_job_list)
     {
@@ -45,9 +45,9 @@ public class UserClass
         this.user_character_id = user_character_id;
         this.user_age = user_age;
         this.user_gender = user_gender;
+        user_jobs = user_current_job_list;
+        user_game_histories = new List<GameHistoryClass>();
         created_at = DateTime.UtcNow;
-        user_job_id = user_current_job_list;
-        games = new List<GameClass>();
     }
     #endregion
 }
@@ -55,16 +55,16 @@ public class UserClass
 public class JobClass
 {
     #region Job Class
-    [BsonElement("job_id")]
-    public ObjectId job_id { get; set; }
+    [BsonId]
+    public ObjectId job_category_id { get; set; }
 
-    [BsonElement("category_name")]
-    public string category_name { get; set; }
+    [BsonElement("job_category_name")]
+    public string job_category_name { get; set; }
 
-    public JobClass(string job_id, string category_name)
+    public JobClass(string job_category_name)
     {
-        this.job_id = ObjectId.GenerateNewId();
-        this.category_name = category_name;
+        this.job_category_id = ObjectId.GenerateNewId();
+        this.job_category_name = job_category_name;
     }
     #endregion
 }
@@ -72,8 +72,29 @@ public class JobClass
 public class GameClass
 {
     #region Game Class
-    [BsonElement("game_id")]
+    [BsonId]
     public ObjectId game_id { get; set; }
+
+    [BsonElement("game_name")]
+    public string game_name { get; set; }
+
+    [BsonElement("game_level")]
+    public int game_level { get; set; }
+
+    public GameClass(string game_name, int game_level)
+    {
+        this.game_id = ObjectId.GenerateNewId();
+        this.game_name = game_name;
+        this.game_level = game_level;
+    }
+    #endregion
+}
+
+public class GameHistoryClass
+{
+    #region Game History Class
+    [BsonElement("game_history_id")]
+    public ObjectId game_history_id { get; set; }
 
     [BsonElement("game_name")]
     public string game_name { get; set; }
@@ -87,18 +108,14 @@ public class GameClass
     [BsonElement("game_created_at")]
     public DateTime game_created_at { get; set; }
 
-    [BsonElement("game_play_time")]
-    public TimeSpan game_play_time { get; set; }
 
-
-    public GameClass(string gameId, string gameName, int gameLevel, int gameScore)
+    public GameHistoryClass(string game_name, int game_level, int game_score)
     {
-        this.game_id = ObjectId.GenerateNewId();
+        this.game_history_id = ObjectId.GenerateNewId();
         this.game_name = game_name;
         this.game_level = game_level;
         this.game_score = game_score;
         game_created_at = DateTime.UtcNow;
-        game_play_time = TimeSpan.Zero;
     }
     #endregion
 }
@@ -150,7 +167,7 @@ public class MongoDBContext
     private IMongoClient mongoClient;
     public IMongoDatabase database{get; private set;}
 
-    private string mongoDBUserName = "work2gatherAdmin";
+    private string mongoDBUserName = "work2gather";
 
     private string mongoDBPassword = "BqaqH3zsAL3xSM1o";
 
@@ -159,7 +176,7 @@ public class MongoDBContext
     public async Task ConnectToMongoDB()
     {
         // MongoDB 연결 문자열
-        string connectionString = $"mongodb+srv://{mongoDBUserName}:{mongoDBPassword}@qualificationalitated.rc7ev.mongodb.net/?retryWrites=true&w=majority&appName=qualificationalitated";
+        string connectionString = $"mongodb+srv://{mongoDBUserName}:{mongoDBPassword}@qualificationalitated.rc7ev.mongodb.net/";
 
         // MongoDB 클라이언트 생성
         mongoClient = new MongoClient(connectionString);
@@ -201,6 +218,9 @@ public class DatabaseManager : MonoBehaviour
         {
             Debug.Log("MongoDB 연결 성공");
             InitializeCollectionManager();
+
+            // MongoDB 연결 후 CRUD 테스트 수행, 테스트 해보려면 아래 주석 해제하기
+            // await PerformUserCRUDOperations();
         }
         else
         {
@@ -211,5 +231,45 @@ public class DatabaseManager : MonoBehaviour
     private void InitializeCollectionManager()
     {
         collectionManager.Initialize(mongoDBContext.database);
+    }
+    // user collection test crud operation
+    private async Task PerformUserCRUDOperations()
+    {
+        // 1. 새로운 유저 생성
+        List<string> jobs = new List<string> { "Developer", "Designer" };
+        UserClass newUser = new UserClass("JohnDoe", 101, 25, "Male", jobs);
+        
+        await collectionManager.userCollectionManager.CreateUser(newUser);
+
+        // 2. 유저가 존재하는지 확인
+        bool userExists = await collectionManager.userCollectionManager.CheckUserNameExists("JohnDoe");
+        if (userExists)
+        {
+            Debug.Log("JohnDoe 유저가 존재합니다.!!!!!");
+        }
+        else
+        {
+            Debug.Log("JohnDoe 유저가 존재하지 않습니다.!!!!!");
+        }
+
+        // 3. 유저 ID로 조회 (user_id는 ObjectId를 문자열로 변환한 값)
+        string userId = newUser.user_id.ToString();
+        UserClass foundUser = await collectionManager.userCollectionManager.GetUserById(userId);
+
+        if (foundUser != null)
+        {
+            Debug.Log($"조회된 유저 이름: {foundUser.user_name}, 나이: {foundUser.user_age}");
+        }
+
+        // 4. 유저의 게임 히스토리 업데이트
+        GameHistoryClass newGameHistory = new GameHistoryClass("Game1", 5, 1000);  // 새로운 게임 기록 예시
+        await collectionManager.userCollectionManager.UpdateUserGameHistory(userId, newGameHistory);
+
+        // 5. 유저 업데이트 후 확인
+        foundUser = await collectionManager.userCollectionManager.GetUserById(userId);
+        if (foundUser != null && foundUser.user_game_histories.Count > 0)
+        {
+            Debug.Log($"업데이트된 게임 히스토리: {foundUser.user_game_histories[0].game_name}");
+        }
     }
 }

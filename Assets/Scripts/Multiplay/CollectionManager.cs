@@ -38,33 +38,82 @@ public class UserCollectionManager
         Debug.Log("UserCollectionManager 초기화 완료");
     }
 
-    public async void CreateUser(UserClass user)
+    // 유저 생성
+    public async Task CreateUser(UserClass user)
     {
-        await userCollection.InsertOneAsync(user);
+        try
+        {
+            await userCollection.InsertOneAsync(user);
+            Debug.Log($"유저 '{user.user_name}'이(가) 성공적으로 생성되었습니다.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"유저 생성 실패: {ex.Message}");
+        }
     }
 
-    public async Task<UserClass> GetUserById(string userId)
+    // 유저 이름으로 단일 조회
+    public async Task<bool> CheckUserNameExists(string user_name)
     {
-        // 이름으로 검색
-        var filter = Builders<UserClass>.Filter.Eq("_id", ObjectId.Parse(userId));
-        return await userCollection.Find(filter).FirstOrDefaultAsync();
+        try
+        {
+            var filter = Builders<UserClass>.Filter.Eq("user_name", user_name);
+            var user = await userCollection.Find(filter).FirstOrDefaultAsync();
+            return user != null;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"유저 이름 조회 실패: {ex.Message}");
+            return false;
+        }
     }
 
-    public async Task<List<UserClass>> GetAllUsers()
+    // 유저 ID로 단일 조회
+    public async Task<UserClass> GetUserById(string user_id)
     {
-        return await userCollection.Find(_ => true).ToListAsync();
+        try
+        {
+            var filter = Builders<UserClass>.Filter.Eq("_id", ObjectId.Parse(user_id));
+            var user = await userCollection.Find(filter).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                Debug.Log($"유저 ID '{user_id}'를 성공적으로 조회했습니다.");
+            }
+            else
+            {
+                Debug.Log($"유저 ID '{user_id}'를 찾을 수 없습니다.");
+            }
+            return user;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"유저 조회 실패: {ex.Message}");
+            return null;
+        }
     }
 
-    public async void UpdateUser(UserClass user)
+    // 유저 id로 유저 조회 후 게임 히스토리 업데이트
+    public async Task UpdateUserGameHistory(string user_id, GameHistoryClass newGameHistory)
     {
-        var filter = Builders<UserClass>.Filter.Eq("_id", user.user_id);
-        await userCollection.ReplaceOneAsync(filter, user);
-    }
+        try
+        {
+            var filter = Builders<UserClass>.Filter.Eq("_id", ObjectId.Parse(user_id));
+            var update = Builders<UserClass>.Update.Push("user_game_histories", newGameHistory);
+            var result = await userCollection.UpdateOneAsync(filter, update);
 
-    public async void DeleteUser(string userId)
-    {
-        var filter = Builders<UserClass>.Filter.Eq("_id", ObjectId.Parse(userId));
-        await userCollection.DeleteOneAsync(filter);
+            if (result.ModifiedCount > 0)
+            {
+                Debug.Log($"유저 ID '{user_id}'의 게임 히스토리가 성공적으로 업데이트되었습니다.");
+            }
+            else
+            {
+                Debug.Log($"유저 ID '{user_id}'를 찾을 수 없거나 업데이트하지 못했습니다.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"유저 게임 히스토리 업데이트 실패: {ex.Message}");
+        }
     }
 }
 
@@ -81,6 +130,10 @@ public class GameCollectionManager
 
         gameCollection = database.GetCollection<GameClass>("Games");
         Debug.Log("GameCollectionManager 초기화 완료");
+    }
+    public async void CreateGame(GameClass game)
+    {
+        await gameCollection.InsertOneAsync(game);
     }
 }
 
