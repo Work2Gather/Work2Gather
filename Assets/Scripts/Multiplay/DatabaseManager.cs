@@ -150,9 +150,9 @@ public class MongoDBContext
     private IMongoClient mongoClient;
     public IMongoDatabase database{get; private set;}
 
-    private string mongoDBUserName = "***";
+    private string mongoDBUserName = "work2gatherAdmin";
 
-    private string mongoDBPassword = "***";
+    private string mongoDBPassword = "BqaqH3zsAL3xSM1o";
 
     private string mongoDBName = "work2gather";
 

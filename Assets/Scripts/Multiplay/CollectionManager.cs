@@ -11,16 +11,16 @@ public class CollectionManager : MonoBehaviour
 {
 
     public UserCollectionManager userCollectionManager = new UserCollectionManager();
-    // public JobCollectionManager jobCollectionManager = new JobCollectionManager();
-    // public GameCollectionManager gameCollectionManager = new GameCollectionManager();
-    // public CompanyCollectionManager companyCollectionManager = new CompanyCollectionManager();
+    public JobCollectionManager jobCollectionManager = new JobCollectionManager();
+    public GameCollectionManager gameCollectionManager = new GameCollectionManager();
+    public CompanyCollectionManager companyCollectionManager = new CompanyCollectionManager();
 
     public void Initialize(IMongoDatabase database)
     {
         userCollectionManager.Initialize(database);
-        // jobCollectionManager.Initialize(database);
-        // gameCollectionManager.Initialize(database);
-        // companyCollectionManager.Initialize(database);
+        jobCollectionManager.Initialize(database);
+        gameCollectionManager.Initialize(database);
+        companyCollectionManager.Initialize(database);
     }
 }
 public class UserCollectionManager
@@ -68,36 +68,56 @@ public class UserCollectionManager
     }
 }
 
-// public class GameCollectionManager
-// {
-//     private IMongoCollection<GameClass> gameCollection;
-//     public void Initialize(IMongoDatabase database)
-//     {
-//         gameCollection = database.GetCollection<GameClass>("Games");
-//     }
-// }
+public class GameCollectionManager
+{
+    private IMongoCollection<GameClass> gameCollection;
+    public void Initialize(IMongoDatabase database)
+    {
+        if (database == null)
+        {
+            Debug.LogError("데이터베이스가 null입니다. GameCollectionManager를 초기화할 수 없습니다.");
+            return;
+        }
+
+        gameCollection = database.GetCollection<GameClass>("Games");
+        Debug.Log("GameCollectionManager 초기화 완료");
+    }
+}
 
 
 
-// public class JobCollectionManager
-// {
-//     private IMongoCollection<JobClass> jobCollection;
+public class JobCollectionManager
+{
+    private IMongoCollection<JobClass> jobCollection;
 
-//     public void Initialize(IMongoDatabase database)
-//     {
-//         jobCollection = database.GetCollection<JobClass>("JobCategory");
-//     }
-// }
+    public void Initialize(IMongoDatabase database)
+    {
+        if (database == null)
+        {
+            Debug.LogError("데이터베이스가 null입니다. JobCollectionManager를 초기화할 수 없습니다.");
+            return;
+        }
+
+        jobCollection = database.GetCollection<JobClass>("JobCategory");
+        Debug.Log("JobCollectionManager 초기화 완료");
+    }
+}
 
 
 
-// public class CompanyCollectionManager
-// {
-//     private IMongoCollection<CompanyClass> companyCollection;
+public class CompanyCollectionManager
+{
+    private IMongoCollection<CompanyClass> companyCollection;
 
-//     public void Initialize(IMongoDatabase database)
-//     {
-//         companyCollection = database.GetCollection<CompanyClass>("Companies");
-//     }
-// }
+    public void Initialize(IMongoDatabase database)
+    {
+        if (database == null)
+        {
+            Debug.LogError("데이터베이스가 null입니다. CompanyCollectionManager를 초기화할 수 없습니다.");
+            return;
+        }
+        companyCollection = database.GetCollection<CompanyClass>("Companies");
+        Debug.Log("CompanyCollectionManager 초기화 완료");
+    }
+}
 
