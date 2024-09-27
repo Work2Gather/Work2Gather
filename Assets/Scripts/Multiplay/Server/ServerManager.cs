@@ -30,7 +30,7 @@ public class ServerManager : MonoBehaviour
     {
         Debug.Log("Server started");    //CLI에서 한글이 깨져서 영어로 작성
         databaseManager.mongoDBContext = new MongoDBContext();
-        databaseManager.mongoDBContext.ConnectToMongoDB(); // DB 연결 하고싶음 > 연결 완!
+        _ = databaseManager.mongoDBContext.ConnectToMongoDB(); // DB 연결 하고싶음 > 연결 완!
     }
 
     // 클라이언트가 연결되었을 때 호출될 함수

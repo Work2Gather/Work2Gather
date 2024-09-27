@@ -28,7 +28,14 @@ public class UserCollectionManager
     private IMongoCollection<UserClass> userCollection;
     public void Initialize(IMongoDatabase database)
     {
+        if (database == null)
+        {
+            Debug.LogError("데이터베이스가 null입니다. UserCollectionManager를 초기화할 수 없습니다.");
+            return;
+        }
+
         userCollection = database.GetCollection<UserClass>("Users");
+        Debug.Log("UserCollectionManager 초기화 완료");
     }
 
     public async void CreateUser(UserClass user)

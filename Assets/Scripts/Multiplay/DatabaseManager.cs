@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 #region Collections
 
@@ -149,13 +150,13 @@ public class MongoDBContext
     private IMongoClient mongoClient;
     public IMongoDatabase database{get; private set;}
 
-    private string mongoDBUserName = "work2gatherAdmin";
+    private string mongoDBUserName = "***";
 
-    private string mongoDBPassword = "BqaqH3zsAL3xSM1o";
+    private string mongoDBPassword = "***";
 
     private string mongoDBName = "work2gather";
 
-    public void ConnectToMongoDB()
+    public async Task ConnectToMongoDB()
     {
         // MongoDB 연결 문자열
         string connectionString = $"mongodb+srv://{mongoDBUserName}:{mongoDBPassword}@qualificationalitated.rc7ev.mongodb.net/?retryWrites=true&w=majority&appName=qualificationalitated";
@@ -166,7 +167,16 @@ public class MongoDBContext
         // 데이터베이스 선택
         database = mongoClient.GetDatabase(mongoDBName);
 
-        Debug.Log("MongoDB에 연결되었습니다.");
+        try
+        {
+            await database.RunCommandAsync((Command<BsonDocument>)"{ping:1}");
+            Debug.Log("MongoDB에 연결되었습니다.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"MongoDB 연결 실패: {ex.Message}");
+            database = null;
+        }
     }
 }
 
@@ -174,10 +184,31 @@ public class MongoDBContext
 
 public class DatabaseManager : MonoBehaviour
 {
-    public MongoDBContext mongoDBContext = new MongoDBContext();
+    public MongoDBContext mongoDBContext;
     [SerializeField] public CollectionManager collectionManager;
 
-    void Start()
+    // 비동기적으로 데이터베이스 연결
+    async void Start()
+    {
+        mongoDBContext = new MongoDBContext();
+        await InitializeDatabaseConnection();
+    }
+
+    private async Task InitializeDatabaseConnection()
+    {
+        await mongoDBContext.ConnectToMongoDB();
+        if (mongoDBContext.database != null)
+        {
+            Debug.Log("MongoDB 연결 성공");
+            InitializeCollectionManager();
+        }
+        else
+        {
+            Debug.LogError("MongoDB 연결 실패");
+        }
+    }
+
+    private void InitializeCollectionManager()
     {
         collectionManager.Initialize(mongoDBContext.database);
     }
