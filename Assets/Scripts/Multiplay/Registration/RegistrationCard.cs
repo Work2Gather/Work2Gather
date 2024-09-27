@@ -35,12 +35,12 @@ public class RegistrationCard : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         sb.Append("");
 
-        if (userClass.user_job_id.Count >= 1)
-            sb.Append(userClass.user_job_id[0]);
-        if (userClass.user_job_id.Count >= 2)
+        if (userClass.user_jobs.Count >= 1)
+            sb.Append(userClass.user_jobs[0]);
+        if (userClass.user_jobs.Count >= 2)
         {
-            sb.Append(", ").Append(userClass.user_job_id[1]);
-            if (userClass.user_job_id.Count > 2)
+            sb.Append(", ").Append(userClass.user_jobs[1]);
+            if (userClass.user_jobs.Count > 2)
                 sb.Append(", ").Append("...");
         }
 
