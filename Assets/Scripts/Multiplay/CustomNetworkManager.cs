@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class CustomNetworkManager : MonoBehaviour
+public class CustomNetworkManager : NetworkManager
 {
     private NetworkManager networkManager;
     [SerializeField] GameObject PlayerPrefab;
@@ -42,21 +42,5 @@ public class CustomNetworkManager : MonoBehaviour
 
         // 플레이어를 네트워크에 등록하고 클라이언트에 동기화
         networkObject.SpawnAsPlayerObject(clientId);
-    }
-
-    // 서버를 시작하는 함수
-    public void StartServer()
-    {
-        networkManager.StartServer();
-    }
-
-    public void StartHost()
-    {
-        networkManager.StartHost();
-    }
-
-    public void StartClient()
-    {
-        networkManager.StartClient();
     }
 }

@@ -1,6 +1,5 @@
 using KinematicCharacterController.Examples;
 using Michsky.DreamOS;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -49,33 +48,40 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // if(SceneManager.GetActiveScene().name == "1. MainTown")
-        //     SetPlayer();
-        SetPlayer();
-        SetUI();
+        ClientManager = FindFirstObjectByType<ClientManager>();
+        
+        if (SceneManager.GetActiveScene().name == "1. MainTown")
+        {
+            SetPlayer();
+            SetUI();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (PlayerObject == null)
+        {
+            PlayerObject = GameObject.FindGameObjectWithTag("Player");
+            if (SceneManager.GetActiveScene().name == "1. MainTown")
+            {
+                SetUI();
+            }
+        }
     }
 
     void SetPlayer()
     {
-        ClientManager = FindFirstObjectByType<ClientManager>();
-
+        //PlayerObject = Instantiate(PlayerObjectArray[playerId - 1], SpawnPosition, Quaternion.identity);
         //playerId = 통신해서 얻은 각 클라이언트 player_id;
-
         if (ClientManager != null)
-            PlayerObject = ClientManager.InstantiatePlayer(PlayerObjectArray[playerId - 1], SpawnPosition);
+        {
+            ClientManager.StartClient();
+        }
         else
         {
             PlayerObject = Instantiate(PlayerObjectArray[playerId - 1], SpawnPosition, Quaternion.identity);
         }
-
-        if(PlayerObject == null)
-        PlayerObject = GameObject.FindGameObjectWithTag("Player");
     }
 
     void SetUI()

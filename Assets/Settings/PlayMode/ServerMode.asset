@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a689d91966dfb46499fb63f130d9b905, type: 3}
-  m_Name: NewPlayModeScenario
+  m_Name: ServerMode
   m_EditorClassIdentifier: 
   m_Description: 
   m_EnableEditors: 1
   m_MainEditorInstance:
-    rid: 741212145508155472
+    rid: 741212191682461810
   m_EditorInstances: []
   m_LocalInstances: []
   m_RemoteInstances: []
@@ -24,11 +24,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 741212145508155472
+    - rid: 741212191682461810
       type: {class: EditorInstanceDescription, ns: Unity.Multiplayer.PlayMode.Scenarios.Editor, asm: Unity.Multiplayer.PlayMode.Scenarios.Editor}
       data:
-        Name: Editor
+        Name: Main Editor
         <CorrespondingNodeId>k__BackingField: 
-        m_Role: 1
+        m_Role: 2
         m_PlayerTag: 
-        m_InitialScene: {fileID: 0}
+        m_InitialScene: {fileID: 102900000, guid: 54cb1d14daf56ab44b7f9eff47a1eba5, type: 3}

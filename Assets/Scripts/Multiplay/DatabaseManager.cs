@@ -173,7 +173,7 @@ public class MongoDBContext
         // 잡카테고리 컬렉션 = 컴퍼니 컬렉션 스트링을 넣어서 잡은 진짜 컬렉션;
 
 
-        Debug.Log("MongoDB에 연결되었습니다.");
+        Debug.Log("Connected to MongoDB");
     }
 
 }
@@ -192,6 +192,6 @@ public class DatabaseManager : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 }

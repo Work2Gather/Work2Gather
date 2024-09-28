@@ -14,6 +14,7 @@ public class TheaterManager : MonoBehaviour
 {
     [SerializeField] public TicketGameManager TicketGameManager;
     [SerializeField] public UIManager UIManager;
+    [SerializeField] public AudioManager AudioManager;
     // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
     private static TheaterManager _instance;
     // 인스턴스에 접근하기 위한 프로퍼티
@@ -52,7 +53,14 @@ public class TheaterManager : MonoBehaviour
     {
         if (Cursor.lockState == CursorLockMode.Locked)
             Cursor.lockState = CursorLockMode.None;
+
+        AudioManager.BGM.clip = AudioManager.BGMArray[0];
+        AudioManager.BGM.Play();
     }
+
+    #region Sound
+
+    #endregion
 
 
     #region UI
@@ -67,15 +75,21 @@ public class TheaterManager : MonoBehaviour
         UIManager.TicketGame.SetActive(false);
         UIManager.MainSelect.SetActive(true);
         UIManager.InGameUI.SetActive(true);
+
+        AudioManager.BGM.clip = AudioManager.BGMArray[0];
+        AudioManager.BGM.Play();
     }
 
     public void OnClickStartButton(int difficulty)
     {
         UIManager.MainSelect.SetActive(false);
         UIManager.InGameUI.SetActive(false);
+
         switch (difficulty)
         {
             case (int)E_TICKET_DIFFICULTY.Low:
+                AudioManager.BGM.clip = AudioManager.BGMArray[1];
+                AudioManager.BGM.Play();
                 UIManager.TicketGame.SetActive(true);
                 TicketGameManager.StartTicketGame();
                 break;

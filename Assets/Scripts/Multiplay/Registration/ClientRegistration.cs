@@ -21,7 +21,7 @@ public class ClientRegistration : MonoBehaviour
     [SerializeField] GameObject[] PageObjectArray;
     #endregion
 
-    UserClass userClass = null;
+    public UserClass userClass = null;  //DB 통신 확인하면 private으로 바꾸기
     private int pageIndex = 1;
 
     void InitUserClass()
@@ -107,7 +107,7 @@ public class ClientRegistration : MonoBehaviour
                 break;
             case 2:
                 InitUserClass();
-                // TitleManager.Instance.HTTPManager.PostUserClass(userClass);
+                // DB로 해당 UserClass Create하는 코드
                 TitleManager.Instance.UIManager.RegistrationCard.SetActive(true);
                 gameObject.SetActive(false);
                 break;

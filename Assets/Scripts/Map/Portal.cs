@@ -12,6 +12,7 @@ public class Portal : MonoBehaviour
 {
     [SerializeField] string NextSceneName;
     [SerializeField] string FImageText;
+    [SerializeField] string JobiText;
     [SerializeField] Vector3 NextPosition;
     [SerializeField] E_PORTAL_TYPE currentPortalType;
     [SerializeField] bool IsActive;
@@ -21,9 +22,9 @@ public class Portal : MonoBehaviour
         if (other.tag == "Player")
         {
             IsActive = true;
-            if (FImageText != null)
-                GameManager.Instance.UIManager.FImageText.text = FImageText;
+            GameManager.Instance.UIManager.FImageText.text = FImageText;
             GameManager.Instance.UIManager.FImage.SetActive(true);
+            GameManager.Instance.UIManager.JobiText.text = JobiText;
         }
     }
 
@@ -33,7 +34,14 @@ public class Portal : MonoBehaviour
         {
             IsActive = false;
             GameManager.Instance.UIManager.FImage.SetActive(false);
+            GameManager.Instance.UIManager.JobiText.text = "";
         }
+    }
+
+    void Awake()
+    {
+        if (FImageText != "")
+            FImageText = "F를 눌러 방문하기";
     }
 
     void Update()

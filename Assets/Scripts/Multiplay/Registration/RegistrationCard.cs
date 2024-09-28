@@ -19,7 +19,7 @@ public class RegistrationCard : MonoBehaviour
     // 유저 create 후 get 하는부분
     private void OnEnable()
     {
-        // userClass = TitleManager.Instance.DatabaseManager.CurrentUserClass;
+        userClass = GameObject.Find("ClientRegistration").GetComponent<ClientRegistration>().userClass; //DB 통신 확인되면 지우기
         // user class = 유저 get 받아오기
         InitRegistrationCard();
         ConnectButton.gameObject.SetActive(true);
