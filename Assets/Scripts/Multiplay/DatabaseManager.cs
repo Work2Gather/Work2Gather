@@ -220,7 +220,7 @@ public class DatabaseManager : MonoBehaviour
             InitializeCollectionManager();
 
             // MongoDB 연결 후 CRUD 테스트 수행, 테스트 해보려면 아래 주석 해제하기
-            // await PerformUserCRUDOperations();
+            // await PerformAllCRUDOperations();
         }
         else
         {
@@ -232,9 +232,21 @@ public class DatabaseManager : MonoBehaviour
     {
         collectionManager.Initialize(mongoDBContext.database);
     }
-    // user collection test crud operation
+
+    // 모든 컬렉션에 대한 CRUD 테스트를 수행하는 메서드
+    private async Task PerformAllCRUDOperations()
+    {
+        await PerformUserCRUDOperations();
+        await PerformGameCRUDOperations();
+        await PerformJobCRUDOperations();
+        await PerformCompanyCRUDOperations();
+    }
+
+    // User collection test CRUD operation
     private async Task PerformUserCRUDOperations()
     {
+        Debug.Log("=== User CRUD Test ===");
+
         // 1. 새로운 유저 생성
         List<string> jobs = new List<string> { "Developer", "Designer" };
         UserClass newUser = new UserClass("JohnDoe", 101, 25, "Male", jobs);
@@ -243,16 +255,9 @@ public class DatabaseManager : MonoBehaviour
 
         // 2. 유저가 존재하는지 확인
         bool userExists = await collectionManager.userCollectionManager.CheckUserNameExists("JohnDoe");
-        if (userExists)
-        {
-            Debug.Log("JohnDoe 유저가 존재합니다.!!!!!");
-        }
-        else
-        {
-            Debug.Log("JohnDoe 유저가 존재하지 않습니다.!!!!!");
-        }
+        Debug.Log(userExists ? "JohnDoe 유저가 존재합니다." : "JohnDoe 유저가 존재하지 않습니다.");
 
-        // 3. 유저 ID로 조회 (user_id는 ObjectId를 문자열로 변환한 값)
+        // 3. 유저 ID로 조회
         string userId = newUser.user_id.ToString();
         UserClass foundUser = await collectionManager.userCollectionManager.GetUserById(userId);
 
@@ -262,7 +267,7 @@ public class DatabaseManager : MonoBehaviour
         }
 
         // 4. 유저의 게임 히스토리 업데이트
-        GameHistoryClass newGameHistory = new GameHistoryClass("Game1", 5, 1000);  // 새로운 게임 기록 예시
+        GameHistoryClass newGameHistory = new GameHistoryClass("Game1", 5, 1000);
         await collectionManager.userCollectionManager.UpdateUserGameHistory(userId, newGameHistory);
 
         // 5. 유저 업데이트 후 확인
@@ -271,5 +276,93 @@ public class DatabaseManager : MonoBehaviour
         {
             Debug.Log($"업데이트된 게임 히스토리: {foundUser.user_game_histories[0].game_name}");
         }
+    }
+
+    // Game collection test CRUD operation
+    private async Task PerformGameCRUDOperations()
+    {
+        Debug.Log("=== Game CRUD Test ===");
+
+        // 1. 새로운 게임 생성
+        GameClass newGame = new GameClass("TestGame", 1);
+        await collectionManager.gameCollectionManager.CreateGame(newGame);
+        Debug.Log($"게임 생성됨: {newGame.game_name}");
+
+        // 2. 게임 ID로 조회
+        GameClass foundGame = await collectionManager.gameCollectionManager.GetGameById(newGame.game_id);
+        if (foundGame != null)
+        {
+            Debug.Log($"ID로 조회된 게임: {foundGame.game_name}");
+        }
+
+        // 3. 게임 이름으로 조회
+        foundGame = await collectionManager.gameCollectionManager.GetGameByName("TestGame");
+        if (foundGame != null)
+        {
+            Debug.Log($"이름으로 조회된 게임: {foundGame.game_name}");
+        }
+
+        // 4. 모든 게임 조회
+        List<GameClass> allGames = await collectionManager.gameCollectionManager.GetAllGames();
+        Debug.Log($"전체 게임 수: {allGames.Count}");
+    }
+
+    // Job collection test CRUD operation
+    private async Task PerformJobCRUDOperations()
+    {
+        Debug.Log("=== Job CRUD Test ===");
+
+        // 1. 새로운 직업 생성
+        JobClass newJob = new JobClass("TestJob");
+        await collectionManager.jobCollectionManager.CreateJob(newJob);
+        Debug.Log($"직업 생성됨: {newJob.job_category_name}");
+
+        // 2. 직업 ID로 조회
+        JobClass foundJob = await collectionManager.jobCollectionManager.GetJobById(newJob.job_category_id);
+        if (foundJob != null)
+        {
+            Debug.Log($"ID로 조회된 직업: {foundJob.job_category_name}");
+        }
+
+        // 3. 직업 이름으로 조회
+        foundJob = await collectionManager.jobCollectionManager.GetJobByName("TestJob");
+        if (foundJob != null)
+        {
+            Debug.Log($"이름으로 조회된 직업: {foundJob.job_category_name}");
+        }
+
+        // 4. 모든 직업 조회
+        List<JobClass> allJobs = await collectionManager.jobCollectionManager.GetAllJobs();
+        Debug.Log($"전체 직업 수: {allJobs.Count}");
+    }
+
+    // Company collection test CRUD operation
+    private async Task PerformCompanyCRUDOperations()
+    {
+        Debug.Log("=== Company CRUD Test ===");
+
+        // 1. 새로운 회사 생성
+        UserClass dummyOwner = new UserClass("OwnerName", 1, 30, "Male", new List<string> { "CEO" });
+        CompanyClass newCompany = new CompanyClass("TestCompany", dummyOwner, "Test Description", "test@email.com", "123-456-7890");
+        await collectionManager.companyCollectionManager.CreateCompany(newCompany);
+        Debug.Log($"회사 생성됨: {newCompany.company_name}");
+
+        // 2. 회사 ID로 조회
+        CompanyClass foundCompany = await collectionManager.companyCollectionManager.GetCompanyById(newCompany.company_id);
+        if (foundCompany != null)
+        {
+            Debug.Log($"ID로 조회된 회사: {foundCompany.company_name}");
+        }
+
+        // 3. 회사 이름으로 조회
+        foundCompany = await collectionManager.companyCollectionManager.GetCompanyByName("TestCompany");
+        if (foundCompany != null)
+        {
+            Debug.Log($"이름으로 조회된 회사: {foundCompany.company_name}");
+        }
+
+        // 4. 모든 회사 조회
+        List<CompanyClass> allCompanies = await collectionManager.companyCollectionManager.GetAllCompanies();
+        Debug.Log($"전체 회사 수: {allCompanies.Count}");
     }
 }
