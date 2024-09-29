@@ -39,7 +39,7 @@ public class Portal : MonoBehaviour
         {
             IsActive = false;
             GameManager.Instance.UIManager.FImage.SetActive(false);
-            GameManager.Instance.UIManager.JobiText.text = "";
+            //GameManager.Instance.UIManager.JobiText.text = "";
         }
     }
 
@@ -73,8 +73,7 @@ public class Portal : MonoBehaviour
                 break;
             case E_PORTAL_TYPE.Position:
                 GameManager.Instance.PlayerObject.transform.GetChild(0).GetComponent<KinematicCharacterMotor>().SetPosition(NextPosition);
-                GameManager.Instance.UIManager.FImageText.text = NextJobiText;
-                //GameManager.Instance.PlayerObject.transform.position = NextPosition;
+                GameManager.Instance.UIManager.JobiText.text = NextJobiText;
                 break;
         }
     }

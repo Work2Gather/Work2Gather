@@ -33,7 +33,7 @@ public class Job : MonoBehaviour
             int temp = dropdown.value & (1 << i);
             if (temp == (1 << i))
             {
-                CurrentJobList.Add(dropdown.options[i+1].text);
+                CurrentJobList.Add(dropdown.options[i].text);
             }
         }
         Debug.Log(CurrentJobList);
