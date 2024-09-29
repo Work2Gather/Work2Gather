@@ -1,3 +1,4 @@
+using KinematicCharacterController.Examples;
 using TicketGame;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,7 +50,7 @@ public class TheaterManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (Cursor.lockState == CursorLockMode.Locked)
             Cursor.lockState = CursorLockMode.None;
@@ -67,7 +68,10 @@ public class TheaterManager : MonoBehaviour
 
     public void OnClickReturnButton()
     {
-        SceneManager.LoadScene("1. MainTown");
+        transform.parent.gameObject.SetActive(false);
+        GameManager.Instance.PlayerObject.GetComponent<ExamplePlayer>().enabled = true;
+        GameManager.Instance.AudioManager.BGM.Play();
+        //SceneManager.LoadScene("1. MainTown");
     }
 
     public void ReturnToMainSelect()

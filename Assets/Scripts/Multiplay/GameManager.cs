@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public RPCManager RPCManager;
     [SerializeField] public ClientManager ClientManager;
     [SerializeField] public UIManager UIManager;
+    [SerializeField] public AudioManager AudioManager;
     [SerializeField] public GameObject[] PlayerObjectArray;
 
     [SerializeField] private Vector3 SpawnPosition = Vector3.zero;

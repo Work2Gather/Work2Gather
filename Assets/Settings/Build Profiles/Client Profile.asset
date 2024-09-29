@@ -22,14 +22,14 @@ MonoBehaviour:
     m_path: Assets/Resources/Scenes/0. Title.unity
   - m_enabled: 1
     m_path: Assets/Resources/Scenes/1. MainTown.unity
-  - m_enabled: 1
-    m_path: Assets/Resources/Scenes/2-1. Theater.unity
-  - m_enabled: 1
-    m_path: Assets/Resources/Scenes/2-2. Exhibition.unity
-  - m_enabled: 1
-    m_path: Assets/Resources/Scenes/2-3. Store.unity
-  - m_enabled: 1
-    m_path: Assets/Resources/Scenes/3. ChatRoom.unity
+  - m_enabled: 0
+    m_path: Assets/Resources/Scenes/obsolete/2-1. Theater.unity
+  - m_enabled: 0
+    m_path: Assets/Resources/Scenes/obsolete/2-2. Exhibition.unity
+  - m_enabled: 0
+    m_path: Assets/Resources/Scenes/obsolete/2-3. Store.unity
+  - m_enabled: 0
+    m_path: Assets/Resources/Scenes/obsolete/3. ChatRoom.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings: []

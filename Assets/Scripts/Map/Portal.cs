@@ -1,3 +1,6 @@
+using System.Collections;
+using KinematicCharacterController;
+using KinematicCharacterController.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,9 +16,11 @@ public class Portal : MonoBehaviour
     [SerializeField] string NextSceneName;
     [SerializeField] string FImageText;
     [SerializeField] string JobiText;
+    [SerializeField] string NextJobiText;
     [SerializeField] Vector3 NextPosition;
     [SerializeField] E_PORTAL_TYPE currentPortalType;
     [SerializeField] bool IsActive;
+    [SerializeField] GameObject Canvas;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -62,13 +67,15 @@ public class Portal : MonoBehaviour
             case E_PORTAL_TYPE.None:
                 break;
             case E_PORTAL_TYPE.Scene:
-                SceneManager.LoadScene(NextSceneName);
+                Canvas.SetActive(true);
+                GameManager.Instance.PlayerObject.GetComponent<ExamplePlayer>().enabled = false;
+                GameManager.Instance.AudioManager.BGM.Stop();
                 break;
             case E_PORTAL_TYPE.Position:
-                //플레이어 텔포가 안됨..
-                GameManager.Instance.PlayerObject.transform.position = NextPosition;
+                GameManager.Instance.PlayerObject.transform.GetChild(0).GetComponent<KinematicCharacterMotor>().SetPosition(NextPosition);
+                GameManager.Instance.UIManager.FImageText.text = NextJobiText;
+                //GameManager.Instance.PlayerObject.transform.position = NextPosition;
                 break;
         }
     }
-
 }
