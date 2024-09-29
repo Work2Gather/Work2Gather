@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 public class Nickname : MonoBehaviour
 {
@@ -9,16 +10,12 @@ public class Nickname : MonoBehaviour
     public string CurrentNickname = null;
     public bool IsValidNickname = false;
 
-    public bool CheckNicknameDuplication()
+    public Task<bool> CheckNicknameDuplication()
     {
-        bool isDuplicate = false;
-
-        //TitleManager.Instance.HTTPManager.GetUserClass();
-
-        return isDuplicate;
+        return TitleManager.Instance.DatabaseManager.collectionManager.userCollectionManager.CheckUserNameExists(inputField.text);
     }
 
-    public void OnClickDuplicateCheckButton()
+    public async void OnClickDuplicateCheckButton()
     {
         for(int i = 0; i < ErrorHandler.transform.childCount; i++)
         {
@@ -33,7 +30,7 @@ public class Nickname : MonoBehaviour
             return;
         }
 
-        if (CheckNicknameDuplication())
+        if (await CheckNicknameDuplication())
         {
             ErrorHandler.transform.GetChild(0).gameObject.SetActive(true);
             CurrentNickname = null;

@@ -17,10 +17,9 @@ public class RegistrationCard : MonoBehaviour
     private UserClass userClass;
 
     // 유저 create 후 get 하는부분
-    private void OnEnable()
+    private async void OnEnable()
     {
-        // userClass = TitleManager.Instance.DatabaseManager.CurrentUserClass;
-        // user class = 유저 get 받아오기
+        userClass = await TitleManager.Instance.DatabaseManager.collectionManager.userCollectionManager.GetUserById(TitleManager.Instance.ClientRegistration.userClassId.ToString());
         InitRegistrationCard();
         ConnectButton.gameObject.SetActive(true);
     }

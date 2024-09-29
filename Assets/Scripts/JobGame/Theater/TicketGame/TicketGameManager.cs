@@ -13,8 +13,16 @@ namespace TicketGame
         MovieName,
         ScreenTime,
     }
+
+    public enum E_TICKET_DIFFICULTY
+    {
+        Low,
+        Mid,
+        High,
+    }
     public class TicketGameManager : MonoBehaviour
     {
+        [SerializeField] public UIManager UIManager;
         #region Serialized Member
         [SerializeField] private Button AcceptButton;
         [SerializeField] private Button RejectButton;
@@ -32,43 +40,17 @@ namespace TicketGame
         public int currScore = 0;
 
         #endregion
-        // 싱글톤 패턴을 사용하기 위한 인스턴스 변수
-        private static TicketGameManager _instance;
-        // 인스턴스에 접근하기 위한 프로퍼티
-        public static TicketGameManager Instance
-        {
-            get
-            {
-                // 인스턴스가 없는 경우에 접근하려 하면 인스턴스를 할당해준다.
-                if (!_instance)
-                {
-                    _instance = FindObjectOfType(typeof(TicketGameManager)) as TicketGameManager;
-
-                    if (_instance == null)
-                        Debug.Log("no Singleton obj");
-                }
-                return _instance;
-            }
-        }
-
-        private void Awake()
-        {
-            if (_instance == null)
-            {
-                _instance = this;
-            }
-            // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
-            else if (_instance != this)
-            {
-                Destroy(gameObject);
-            }
-            // 아래의 함수를 사용하여 씬이 전환되더라도 선언되었던 인스턴스가 파괴되지 않는다.
-            DontDestroyOnLoad(gameObject);
-        }
 
         private void Start()
         {
+            Debug.Log("Start Ticket Game");
+        }
+        #region Ticket Game
+
+        public void StartTicketGame()
+        {
             timer.StartTimer(TimerSec);
+            timer.OnTimeOut(() => {TimeOut();});
             ticketScreenInfo.SetScreenInfo("기가박스(Gigavox) K-Hackerton 점", "1관(Laser)", "아웃사이드인", "17:35 ~ 20:05");
             SetNewGuest();
         }
@@ -84,7 +66,7 @@ namespace TicketGame
 
         public void AcceptGuest()
         {
-            if(CheckDecision(true))
+            if (CheckDecision(true))
             {
                 ticketGuest.FadeOutImage();
                 currScore++;
@@ -102,7 +84,7 @@ namespace TicketGame
 
         public void RejectGuest()
         {
-            if(CheckDecision(false))
+            if (CheckDecision(false))
             {
                 ticketGuest.FadeOutImage();
                 currScore++;
@@ -144,17 +126,17 @@ namespace TicketGame
                     correctCount--;
                 }
 
-                if(correctCount == 0)
-                result = true;
+                if (correctCount == 0)
+                    result = true;
             }
             else
             {
-                for(int i = 0; i < ticketScreenInfo.screenInfo.Length; i++)
+                for (int i = 0; i < ticketScreenInfo.screenInfo.Length; i++)
                 {
-                    if(ticketScreenInfo.screenInfo[i] == ticket.currInfoArray[i])
-                    continue;
-                    if(!ticket.selectedInfoArray[i])
-                    continue;
+                    if (ticketScreenInfo.screenInfo[i] == ticket.currInfoArray[i])
+                        continue;
+                    if (!ticket.selectedInfoArray[i])
+                        continue;
 
                     correctCount--;
                 }
@@ -168,5 +150,13 @@ namespace TicketGame
 
             return result;
         }
+
+        public void TimeOut()
+        {
+            //타임 아웃 시 보여줄 것
+            TheaterManager.Instance.ReturnToMainSelect();
+        }
+
+        #endregion
     }
 }

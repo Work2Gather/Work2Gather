@@ -5,6 +5,8 @@ public class TitleManager : MonoBehaviour
 {
     [SerializeField] public UIManager UIManager;
     [SerializeField] public DatabaseManager DatabaseManager;
+    [SerializeField] public ClientManager ClientManager;
+    [SerializeField] public ClientRegistration ClientRegistration;
     private static TitleManager _instance;
     // 인스턴스에 접근하기 위한 프로퍼티
     public static TitleManager Instance
@@ -63,7 +65,7 @@ public class TitleManager : MonoBehaviour
 
     public void ConnectToWorld()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("1. MainTown");
     }
 
     #endregion

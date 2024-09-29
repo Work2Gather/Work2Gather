@@ -2,35 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using MongoDB.Bson;
+using System;
 
 public class ClientManager : MonoBehaviour
 {
-    // NetworkManager를 참조하기 위한 변수
-    private NetworkManager networkManager;
-
-    void Awake()
-    {
-        networkManager = GetComponent<NetworkManager>();
-    }
-
+    public string currentUserId;
+    public int currentMap;
     // Start is called before the first frame update
     void Start()
     {
-        // 클라이언트가 연결될 때 호출될 콜백 등록
-        networkManager.OnClientConnectedCallback += OnClientConnected;
+        //currentUserId = "66f7f90c1c582de6b073faca";
+        currentMap = 0;
 
-        // 서버에 접속
-        StartClient();
-    }
-
-    public void StartClient()
-    {
-        networkManager.StartClient();
-    }
-
-    // 클라이언트가 연결되었을 때 호출될 함수
-    private void OnClientConnected(ulong clientId)
-    {
-        Debug.Log($"클라이언트가 연결되었습니다. Client ID: {clientId}");
+        DontDestroyOnLoad(this.gameObject);
     }
 }

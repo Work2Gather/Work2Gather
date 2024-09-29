@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Bson;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class ClientRegistration : MonoBehaviour
     #endregion
 
     UserClass userClass = null;
+    public ObjectId userClassId;
     private int pageIndex = 1;
 
     void InitUserClass()
@@ -57,6 +59,8 @@ public class ClientRegistration : MonoBehaviour
         }
 
         userClass = new UserClass(Nickname.CurrentNickname, Character.CurrentCharacter, Age.CurrentAge, Gender.CurrentGender, Job.CurrentJobList);
+        userClassId = userClass.user_id;
+        TitleManager.Instance.ClientManager.currentUserId = userClassId.ToString();
     }
 
     bool CheckNextButtonActivation(int index)
@@ -95,7 +99,7 @@ public class ClientRegistration : MonoBehaviour
         }
     }
 
-    public void OnClickNextButton()
+    public async void OnClickNextButton()
     {
         switch (pageIndex)
         {
@@ -107,7 +111,7 @@ public class ClientRegistration : MonoBehaviour
                 break;
             case 2:
                 InitUserClass();
-                // TitleManager.Instance.HTTPManager.PostUserClass(userClass);
+                await TitleManager.Instance.DatabaseManager.collectionManager.userCollectionManager.CreateUser(userClass);
                 TitleManager.Instance.UIManager.RegistrationCard.SetActive(true);
                 gameObject.SetActive(false);
                 break;
