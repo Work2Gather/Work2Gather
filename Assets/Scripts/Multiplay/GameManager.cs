@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] public RPCManager RPCManager;
+    [SerializeField] public ClientManager ClientManager;
     [SerializeField] public UIManager UIManager;
     [SerializeField] public GameObject[] PlayerObjectArray;
 
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         RPCManager = FindFirstObjectByType<RPCManager>();
+        ClientManager = FindFirstObjectByType<ClientManager>();
 
         if (RPCManager.Server == false)
         {
@@ -74,7 +76,6 @@ public class GameManager : MonoBehaviour
 
     void SetPlayer()
     {
-        Debug.Log("Set Player");
         if (RPCManager != null)
         {
             RPCManager.StartClient();

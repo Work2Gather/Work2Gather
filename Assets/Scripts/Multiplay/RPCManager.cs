@@ -32,7 +32,7 @@ public class RPCManager : NetworkBehaviour
     #region Server
 
     // 서버가 시작되었을 때 호출될 함수
-    private async void HandleServerStarted()
+    private void HandleServerStarted()
     {
         Debug.Log("Server started");
 
@@ -47,7 +47,8 @@ public class RPCManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             Debug.Log("Client" + clientId + " connected");
-            InstantiatePlayer(clientId);
+            RequestPlayerModelIdServerRpc(clientId);
+            InstantiatePlayer(clientId, currentUserId.ToString());
         }
         else
         {
@@ -55,11 +56,34 @@ public class RPCManager : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestPlayerModelIdServerRpc(ulong clientId)
+    {
+        Debug.Log("S");
+        // 클라이언트에게 player_model_id를 요청
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        RequestPlayerModelIdClientRpc(clientRpcParams);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendPlayerModelIdServerRpc(string playerModelId, ServerRpcParams serverRpcParams = default)
+    {
+        // 서버에서 받은 player_model_id를 사용하여 플레이어 인스턴스화
+        InstantiatePlayer(serverRpcParams.Receive.SenderClientId, playerModelId);
+    }
+
     //플레이어를 스폰하는 함수
-    private async void InstantiatePlayer(ulong clientId)
+    private async void InstantiatePlayer(ulong clientId, string playerModelId)
     {
         GameObject playerObject = null;
-        string player_id = currentUserId.ToString();
+        //string player_id = currentUserId.ToString();
+        string player_id = playerModelId;
         UserClass temp = await databaseManager.collectionManager.userCollectionManager.GetUserById(player_id);
         Vector3 position = new Vector3(60, 1, 40);
 
@@ -91,6 +115,26 @@ public class RPCManager : NetworkBehaviour
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
+    }
+
+    [ClientRpc]
+    private void RequestPlayerModelIdClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        Debug.Log("Request Received");
+        if (IsClient && IsOwner)
+        {
+            // 클라이언트에서 player_model_id를 가져와 서버로 전송
+            string playerModelId = GetPlayerModelIdFromClientData();
+            SendPlayerModelIdServerRpc(playerModelId);
+        }
+    }
+
+    private string GetPlayerModelIdFromClientData()
+    {
+        // 클라이언트에서 player_model_id를 가져오는 로직
+        // 예: PlayerPrefs, 로컬 DB 등에서 데이터 로드
+        Debug.Log(GameManager.Instance.ClientManager.currentUserId);
+        return GameManager.Instance.ClientManager.currentUserId;
     }
 
     #endregion

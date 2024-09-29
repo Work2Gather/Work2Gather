@@ -60,7 +60,7 @@ public class ClientRegistration : MonoBehaviour
 
         userClass = new UserClass(Nickname.CurrentNickname, Character.CurrentCharacter, Age.CurrentAge, Gender.CurrentGender, Job.CurrentJobList);
         userClassId = userClass.user_id;
-        TitleManager.Instance.RPCManager.currentUserId = userClassId.ToString();
+        TitleManager.Instance.ClientManager.currentUserId = userClassId.ToString();
     }
 
     bool CheckNextButtonActivation(int index)

@@ -5,7 +5,7 @@ public class TitleManager : MonoBehaviour
 {
     [SerializeField] public UIManager UIManager;
     [SerializeField] public DatabaseManager DatabaseManager;
-    [SerializeField] public RPCManager RPCManager;
+    [SerializeField] public ClientManager ClientManager;
     [SerializeField] public ClientRegistration ClientRegistration;
     private static TitleManager _instance;
     // 인스턴스에 접근하기 위한 프로퍼티
