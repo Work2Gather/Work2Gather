@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Bson;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,8 @@ public class ClientRegistration : MonoBehaviour
     [SerializeField] GameObject[] PageObjectArray;
     #endregion
 
-    public UserClass userClass = null;  //DB 통신 확인하면 private으로 바꾸기
+    UserClass userClass = null;
+    public ObjectId userClassId;
     private int pageIndex = 1;
 
     void InitUserClass()
@@ -57,6 +59,8 @@ public class ClientRegistration : MonoBehaviour
         }
 
         userClass = new UserClass(Nickname.CurrentNickname, Character.CurrentCharacter, Age.CurrentAge, Gender.CurrentGender, Job.CurrentJobList);
+        userClassId = userClass.user_id;
+        TitleManager.Instance.RPCManager.currentUserId = userClassId.ToString();
     }
 
     bool CheckNextButtonActivation(int index)
@@ -95,7 +99,7 @@ public class ClientRegistration : MonoBehaviour
         }
     }
 
-    public void OnClickNextButton()
+    public async void OnClickNextButton()
     {
         switch (pageIndex)
         {
@@ -107,7 +111,7 @@ public class ClientRegistration : MonoBehaviour
                 break;
             case 2:
                 InitUserClass();
-                // DB로 해당 UserClass Create하는 코드
+                await TitleManager.Instance.DatabaseManager.collectionManager.userCollectionManager.CreateUser(userClass);
                 TitleManager.Instance.UIManager.RegistrationCard.SetActive(true);
                 gameObject.SetActive(false);
                 break;

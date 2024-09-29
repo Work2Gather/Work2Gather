@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] public ClientManager ClientManager;
+    [SerializeField] public RPCManager RPCManager;
     [SerializeField] public UIManager UIManager;
     [SerializeField] public GameObject[] PlayerObjectArray;
 
@@ -48,12 +48,14 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ClientManager = FindFirstObjectByType<ClientManager>();
-        
-        if (SceneManager.GetActiveScene().name == "1. MainTown")
+        RPCManager = FindFirstObjectByType<RPCManager>();
+
+        if (RPCManager.Server == false)
         {
-            SetPlayer();
-            SetUI();
+            if (SceneManager.GetActiveScene().name == "1. MainTown")
+            {
+                SetPlayer();
+            }
         }
     }
 
@@ -72,16 +74,15 @@ public class GameManager : MonoBehaviour
 
     void SetPlayer()
     {
-        //PlayerObject = Instantiate(PlayerObjectArray[playerId - 1], SpawnPosition, Quaternion.identity);
-        //playerId = 통신해서 얻은 각 클라이언트 player_id;
-        if (ClientManager != null)
+        Debug.Log("Set Player");
+        if (RPCManager != null)
         {
-            ClientManager.StartClient();
+            RPCManager.StartClient();
         }
-        else
-        {
-            PlayerObject = Instantiate(PlayerObjectArray[playerId - 1], SpawnPosition, Quaternion.identity);
-        }
+        // else
+        // {
+        //     PlayerObject = Instantiate(PlayerObjectArray[playerId - 1], SpawnPosition, Quaternion.identity);
+        // }
     }
 
     void SetUI()

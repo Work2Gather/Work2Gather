@@ -40,8 +40,8 @@ public class Portal : MonoBehaviour
 
     void Awake()
     {
-        if (FImageText != "")
-            FImageText = "F를 눌러 방문하기";
+        // if (FImageText != "")
+        //     FImageText = "F를 눌러 방문하기";
     }
 
     void Update()
