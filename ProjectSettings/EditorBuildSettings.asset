@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Resources/Scenes/1. MainTown.unity
     guid: 54cb1d14daf56ab44b7f9eff47a1eba5
   - enabled: 1
-    path: Assets/Resources/Scenes/2-1. Theater.unity
+    path: Assets/Resources/Scenes/obsolete/2-1. Theater.unity
     guid: b780c5888574a6d4dad5b5275bc82110
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

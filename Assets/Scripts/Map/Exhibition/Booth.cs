@@ -13,7 +13,16 @@ public class Booth : MonoBehaviour
     void Start()
     {
         Player = GameManager.Instance.PlayerObject.GetComponentInChildren<ExamplePlayer>();
-        if(Player == null)
+        if (Player == null)
+        {
+            Player = FindFirstObjectByType<ExamplePlayer>();
+        }
+    }
+
+    void OnEnable()
+    {
+        Player = GameManager.Instance.PlayerObject.GetComponentInChildren<ExamplePlayer>();
+        if (Player == null)
         {
             Player = FindFirstObjectByType<ExamplePlayer>();
         }
@@ -65,8 +74,9 @@ public class Booth : MonoBehaviour
     {
         IsActive = false;
         GetComponent<SphereCollider>().enabled = false;
+        Player = GameManager.Instance.PlayerObject.GetComponentInChildren<ExamplePlayer>();
         Player.enabled = false;
-        
+
         GameManager.Instance.UIManager.FImage.SetActive(false);
         BoothImage.SetActive(true);
         BoothCamera.gameObject.SetActive(true);

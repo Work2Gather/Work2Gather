@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using KinematicCharacterController.Examples;
 
 public class RPCManager : NetworkBehaviour
 {
@@ -27,6 +28,7 @@ public class RPCManager : NetworkBehaviour
                 StartServer();
             }
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     #region Server
@@ -91,6 +93,7 @@ public class RPCManager : NetworkBehaviour
         {
             playerObject = NetworkManager.Singleton.NetworkConfig.Prefabs.Prefabs[temp.user_character_id - 1].Prefab;
             GameObject playerInstance = Instantiate(playerObject, position, Quaternion.identity);
+            playerInstance.GetComponent<ExamplePlayer>().Character.Motor.SetPosition(position);
             NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
 
             // 플레이어를 네트워크에 등록하고 클라이언트에 동기화
